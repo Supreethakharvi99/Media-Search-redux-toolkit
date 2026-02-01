@@ -1,0 +1,17 @@
+import React from 'react'
+import { fetchPhotos } from './api/mediaApi'
+
+const App = () => {
+ 
+  return (
+    <div className='h-screen w-full bg-gray-950  text-white '>
+     <button
+     className='bg-amber-50 text-gray-700 px-5 py-2 m-4 rounded active:scale-95'
+      onClick={() => {
+      fetchPhotos('cat')
+     }}>Get Photos</button>
+    </div>
+  )
+}
+
+export default App
