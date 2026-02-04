@@ -1,39 +1,78 @@
 import { useDispatch, useSelector } from 'react-redux'
 import {fetchPhotos,fetchVideos,fetchGifs} from '../api/mediaApi.js'
-import {setQuery,setResults,setError,setLoading} from '../redux/features/searchSlice.js'
+import {setResults,setError,setLoading} from '../redux/features/searchSlice.js'
 import { useEffect } from 'react'
+import ResultCard from './ResultCard.jsx'
 
 const ResultGrid = () => {
  
     const dispatch = useDispatch()
 
     const {query, activeTab,results,loading,error} = useSelector((store) => store.search)
-     
    
     
     useEffect(function(){
+      if(!query) return
        const getData = async() => {
-      let data
-      if(activeTab == 'photos'){
+     try {
+      dispatch(setLoading(true))
+      let data = []
+      if(activeTab === 'photos'){
         let response = await fetchPhotos(query)
-        data = response.results
+        data = response.results.map((item)=>({
+            id:item.id,
+            type:'photo',
+            title:item.alt_description,
+            thumbnail:item.urls.small,
+            src:item.urls.full,
+            url:item.links.html
+        }))
        }
-       if(activeTab == 'videos'){
+       if(activeTab === 'videos'){
         let response = await fetchVideos(query)
-        data = response.videos
+        data = response.videos.map((item)=>({
+           id:item.id,
+           type:'video',
+           title:item.user.name || 'video',
+           thumbnail:item.image,
+           src:item.video_files[0].link,
+           url:item.url
+        }))
        }
-       if(activeTab == 'gif'){
+       if(activeTab === 'gif'){
         let response = await fetchGifs(query)
-        data = response.data.data
+        
+        data = response.data.data.map((item)=>({
+          id:item.id,
+          title:item.title,
+          type:'gif',
+          thumbnail:item.images.fixed_width_small.url,
+          src:item.images.original.url,
+          url:item.url
+        }))
        }
-       console.log(data);
-       
-    }
+         dispatch(setResults(data))
+      
+     } catch (err) {
+      dispatch(setError(err.message))
+      
+     }finally{
+      dispatch(setLoading(false))
+     }
+      
+         }
       getData()
+    },[query, activeTab, dispatch])
 
-    },[query, activeTab])
+    if(error) return <h1>Error</h1>
+    if(loading) return <h1>Loading...</h1>
       return (
-    <div>
+    <div className='flex w-full justify-between flex-wrap gap-6 overflow-auto px-8'>
+      {results.map((item)=>{
+        return  <div key={item.id}>
+          <a target='_blank' href={item.url}><ResultCard item={item}/></a>
+        </div>
+      })}
     </div>
   )
 }

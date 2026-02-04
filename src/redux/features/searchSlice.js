@@ -24,8 +24,8 @@ const searchSlice = createSlice({
         state.loading = false
 
     },
-    setLoading(state){
-        state.loading = true
+    setLoading(state,action){
+        state.loading = action.payload
         state.error = null
 
     },

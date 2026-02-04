@@ -6,12 +6,12 @@ const SearchBar = () => {
 
    const [text,setText] = useState('');
 
-   const disptach = useDispatch()
+   const dispatch = useDispatch()
 
    const submitHandler = (e) => {
     e.preventDefault()
 
-    disptach(setQuery(text))
+    dispatch(setQuery(text))
     setText('');
     
     
