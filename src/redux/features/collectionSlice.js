@@ -14,7 +14,6 @@ const collectionSlice = createSlice({
             if(!alreadyExists){
                 state.items.push(action.payload);
                 localStorage.setItem('collection',JSON.stringify(state.items))
-                console.log('kharvi');
                 
             }
  

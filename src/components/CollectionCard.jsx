@@ -1,24 +1,24 @@
+import React from "react";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { Zoom } from "react-toastify";
-import { addCollection } from "../redux/features/collectionSlice";
+import { toast, Zoom } from "react-toastify";
+import { removeCollection } from "../redux/features/collectionSlice";
 
-const ResultCard = ({ item }) => {
+const CollectionCard = ({ item }) => {
   const dispatch = useDispatch();
-  const addToCollection = (item) => {
-    dispatch(addCollection(item));
-    toast.success("Added to Collection", {
+
+  const removeFromCollection = (item) => {
+    dispatch(removeCollection(item.id));
+    toast.error("Removed from the collection", {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
-      closeOnClick: true,
+      closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
       theme: "dark",
       transition: Zoom,
     });
-  
   };
   return (
     <div className="relative w-[280px] h-[300px] bg-white rounded-xl overflow-hidden">
@@ -63,15 +63,15 @@ const ResultCard = ({ item }) => {
         </h2>
         <button
           onClick={() => {
-            addToCollection(item);
+            removeFromCollection(item);
           }}
           className=" bg-gradient-to-r from-gray-600 to-cyan-700  text-white rounded font-small px-3 py-1 cursor-pointer active:scale-95 "
         >
-          Save
+          Remove
         </button>
       </div>
     </div>
   );
 };
 
-export default ResultCard;
+export default CollectionCard;
