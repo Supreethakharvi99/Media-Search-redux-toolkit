@@ -8,7 +8,9 @@ const ResultGrid = () => {
  
     const dispatch = useDispatch()
 
-    const {query, activeTab,results,loading,error} = useSelector((store) => store.search)
+  const { query, activeTab, results, loading, error } = useSelector(
+  (state) => state.search
+);
    
     
     useEffect(function(){
